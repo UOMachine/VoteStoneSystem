@@ -57,26 +57,28 @@ namespace Server.Vote
         public static string ItemName2 { get => VoteSettings.ItemName2; set => VoteSettings.ItemName2 = value; }
         public static string ItemName3 { get => VoteSettings.ItemName3; set => VoteSettings.ItemName3 = value; }
         public static string ItemName4 { get => VoteSettings.ItemName4; set => VoteSettings.ItemName4 = value; }
-        public static void Initialize()
-        {
-            CommandSystem.Register("VoteRewardGump", AccessLevel.Owner, new CommandEventHandler(VoteRewardGump_OnCommand));
-        }
 
-        private static void VoteRewardGump_OnCommand(CommandEventArgs e)
-        {
-            e.Mobile.SendGump(new VoteRewardGump(e.Mobile));
-        }
-
-        private Mobile m_Mobile;
-        private Item m_Deed;
+        //private Mobile m_Mobile;
+        //private Item m_Deed;
 
         public VoteRewardGump(Mobile from)
-          : base(20, 15)
+          : base(0, 0)
         {
-            m_Mobile = from;
+            if (from == null)
+            {
+                return;
+            }
+            //m_Mobile = from;
             Closable = true;
             Disposable = true;
-            Dragable = true;
+            if(from.IsStaff())
+            {
+                Dragable = true;
+            }
+            else
+            {
+                Dragable = false;
+            }
             Resizable = false;
             AddPage(0);
 
@@ -93,10 +95,31 @@ namespace Server.Vote
             AddLabel(BTN3X, BTN3Y, BTN3Hue, BTN3Name);
             AddLabel(BTN4X, BTN4Y, BTN4Hue, BTN4Name);
             AddLabel(BTN5X, BTN5Y, BTN5Hue, BTN5Name);
+            new VoteGumpTimer(from).Start();
+        }
+
+        private class VoteGumpTimer : Timer
+        {
+            private readonly Mobile from;
+
+            public VoteGumpTimer(Mobile owner)
+                : base(TimeSpan.FromSeconds(0.5))
+            {
+                from = owner;
+                Priority = TimerPriority.EveryTick;
+            }
+
+            protected override void OnTick()
+            {
+                if (from.HasGump(typeof(VoteRewardGump)))
+                {
+                    from.CloseGump(typeof(VoteRewardGump));
+                    from.SendGump(new VoteRewardGump(from));
+                }
+            }
         }
 
         public override void OnResponse(NetState state, RelayInfo info)
-
         {
             Mobile from = state.Mobile;
 
@@ -104,6 +127,7 @@ namespace Server.Vote
             {
                 case 0: //Close Gump 
                     {
+                        new VoteGumpTimer(from).Stop();
                         from.CloseGump(typeof(VoteRewardGump));
                         break;
                     }
@@ -111,37 +135,81 @@ namespace Server.Vote
                     {
                         Type type = ItemSpawnerType.GetType(ItemName1);
                         Item item;
-                        item = Activator.CreateInstance(type) as Item;
-                        from.AddToBackpack(item);
-                        from.CloseGump(typeof(VoteRewardGump));
-                        break;
+                        if (type == null)
+                        {
+                            from.SendAsciiMessage("Invalid Item Type");
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
+                        else
+                        {
+                            item = Activator.CreateInstance(type) as Item;
+                            from.AddToBackpack(item);
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
                     }
                 case 2:
                     {
                         Type type = ItemSpawnerType.GetType(ItemName2);
                         Item item;
-                        item = Activator.CreateInstance(type) as Item;
-                        from.AddToBackpack(item);
-                        from.CloseGump(typeof(VoteRewardGump));
-                        break;
+                        if (type == null)
+                        {
+                            from.SendAsciiMessage("Invalid Item Type");
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
+                        else
+                        {
+                            item = Activator.CreateInstance(type) as Item;
+                            from.AddToBackpack(item);
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
                     }
                 case 3:
                     {
                         Type type = ItemSpawnerType.GetType(ItemName3);
                         Item item;
-                        item = Activator.CreateInstance(type) as Item;
-                        from.AddToBackpack(item);
-                        from.CloseGump(typeof(VoteRewardGump));
-                        break;
+                        if (type == null)
+                        {
+                            from.SendAsciiMessage("Invalid Item Type");
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
+                        else
+                        {
+                            item = Activator.CreateInstance(type) as Item;
+                            from.AddToBackpack(item);
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
                     }
                 case 4:
                     {
                         Type type = ItemSpawnerType.GetType(ItemName4);
                         Item item;
-                        item = Activator.CreateInstance(type) as Item;
-                        from.AddToBackpack(item);
-                        from.CloseGump(typeof(VoteRewardGump));
-                        break;
+                        if (type == null)
+                        {
+                            from.SendAsciiMessage("Invalid Item Type");
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
+                        else
+                        {
+                            item = Activator.CreateInstance(type) as Item;
+                            from.AddToBackpack(item);
+                            new VoteGumpTimer(from).Stop();
+                            from.CloseGump(typeof(VoteRewardGump));
+                            break;
+                        }
                     }
 
             }

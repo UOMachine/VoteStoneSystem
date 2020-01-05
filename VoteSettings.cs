@@ -405,6 +405,56 @@ namespace Server.Vote
             {
                 MSG3 = "Vote Stone Disabled";
             }
+
+            if (GumpTitle == null)
+            {
+                GumpTitle = "My Shard";
+            }
+
+            if (BTN1Name == null)
+            {
+                BTN1Name = "Dagger";
+            }
+
+            if (BTN2Name == null)
+            {
+                BTN2Name = "Dagger";
+            }
+
+            if (BTN3Name == null)
+            {
+                BTN3Name = "Dagger";
+            }
+
+            if (BTN4Name == null)
+            {
+                BTN4Name = "Dagger";
+            }
+
+            if (BTN5Name == null)
+            {
+                BTN5Name = "Dagger";
+            }
+
+            if (ItemName1 == null)
+            {
+                ItemName1 = "Dagger";
+            }
+
+            if (ItemName2 == null)
+            {
+                ItemName2 = "Dagger";
+            }
+
+            if (ItemName3 == null)
+            {
+                ItemName3 = "Dagger";
+            }
+
+            if (ItemName4 == null)
+            {
+                ItemName4 = "Dagger";
+            }
         }
     }
 }

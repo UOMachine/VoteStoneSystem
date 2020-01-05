@@ -34,6 +34,7 @@ namespace Server.Vote
             }
 
             CommandSystem.Register("SetVoteStone", AccessLevel.Administrator, new CommandEventHandler(SetVoteStone_OnCommand));
+            CommandSystem.Register("VoteRewardGump", AccessLevel.Owner, new CommandEventHandler(VoteRewardGump_OnCommand));
         }
 
         public static void SaveVoteSettings(WorldSaveEventArgs e)
@@ -104,6 +105,18 @@ namespace Server.Vote
             if (from != null && !from.Deleted)
             {
                 from.SendGump(new PropertiesGump(e.Mobile, Settings));
+            }
+        }
+
+        [Usage("VoteRewardGump")]
+        [Description("Brings up the gump for rewards.")]
+        public static void VoteRewardGump_OnCommand(CommandEventArgs e)
+        {
+            PlayerMobile from = e.Mobile as PlayerMobile;
+
+            if (from != null && !from.Deleted)
+            {
+                e.Mobile.SendGump(new VoteRewardGump(e.Mobile));
             }
         }
 
